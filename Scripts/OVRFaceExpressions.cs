@@ -174,14 +174,17 @@ public class OVRFaceExpressions : MonoBehaviour, IReadOnlyCollection<float>, OVR
         OVRPermissionsRequester.PermissionGranted -= _onPermissionGranted;
     }
 
-    private void Update()
-    {
-        ValidExpressions =
-            OVRPlugin.GetFaceState2(OVRPlugin.Step.Render, -1, ref _currentFaceState)
-            && _currentFaceState.Status.IsValid;
+private void Update() {
+        ValidExpressions = OVRPlugin.GetFaceState(OVRPlugin.Step.Render, -1, ref _currentFaceState) && _currentFaceState.Status.IsValid;
 
         EyeFollowingBlendshapesValid = ValidExpressions && _currentFaceState.Status.IsEyeFollowingBlendshapesValid;
+
+        if (ValidExpressions) {
+            // これでBrowLowererLの値がfloat型でLog出力されるはず
+            Debug.Log(GetWeight(FaceExpression.BrowLowererL));
+        }
     }
+
 
 
     /// <summary>
